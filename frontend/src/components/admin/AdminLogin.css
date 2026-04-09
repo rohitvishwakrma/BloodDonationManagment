@@ -1,0 +1,203 @@
+/* Admin Login Styles */
+
+.admin-login-page {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-login-page::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: moveBg 20s linear infinite;
+}
+
+@keyframes moveBg {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+.admin-login-box {
+    width: 420px;
+    max-width: 90%;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px 35px;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    animation: slideUp 0.5s ease;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.admin-login-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.admin-login-icon {
+    font-size: 60px;
+    color: #BF222B;
+    margin-bottom: 15px;
+}
+
+.admin-login-box h2 {
+    color: #BF222B;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.admin-login-subtitle {
+    color: #666;
+    font-size: 14px;
+}
+
+.admin-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.admin-login-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-login-input-group label {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-login-input-group label i {
+    color: #BF222B;
+}
+
+.admin-login-input-group input {
+    padding: 14px 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.admin-login-input-group input:focus {
+    outline: none;
+    border-color: #BF222B;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(191, 34, 43, 0.1);
+}
+
+.admin-login-input-group input:hover {
+    border-color: #BF222B;
+}
+
+.admin-login-btn {
+    background: linear-gradient(135deg, #BF222B 0%, #8b1a1a 100%);
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.admin-login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(191, 34, 43, 0.3);
+}
+
+.admin-login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.admin-login-error {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #dc2626;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    text-align: center;
+    margin: 10px 0;
+    border-left: 4px solid #dc2626;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-login-footer {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.admin-login-footer a {
+    color: #BF222B;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s;
+}
+
+.admin-login-footer a:hover {
+    color: #8b1a1a;
+    transform: translateX(3px);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .admin-login-box {
+        padding: 30px 25px;
+        margin: 20px;
+    }
+    
+    .admin-login-box h2 {
+        font-size: 24px;
+    }
+    
+    .admin-login-icon {
+        font-size: 48px;
+    }
+    
+    .admin-login-input-group input {
+        padding: 12px 14px;
+    }
+}

@@ -1,0 +1,430 @@
+/* frontend/src/index.css */
+
+/* Mobile First Approach */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Responsive Tables */
+@media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    
+    thead {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    tr {
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: right;
+    }
+    
+    td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        text-align: left;
+        margin-right: 15px;
+    }
+}
+
+/* Responsive Forms */
+@media (max-width: 768px) {
+    form {
+        padding: 15px;
+    }
+    
+    input, select, textarea {
+        font-size: 16px;
+    }
+    
+    button {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+/* Responsive Grid */
+@media (max-width: 992px) {
+    .dashboard-overview, .overview_card, .stats {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .card {
+        width: 90%;
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .table_part, .table_container {
+        flex-direction: column;
+    }
+    
+    .table_img {
+        width: 100%;
+        order: -1;
+    }
+    
+    .table_box {
+        width: 100%;
+        padding: 15px;
+    }
+}
+
+/* Responsive Home Page */
+@media (max-width: 768px) {
+    .slider_container, .slider, .slider img {
+        height: 40vh;
+    }
+    
+    .link_container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .link_container a {
+        width: 90%;
+        text-align: center;
+    }
+    
+    .blood-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 12px;
+    }
+    
+    .text-center {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* Responsive Admin Dashboard */
+@media (max-width: 768px) {
+    .admin_box, .conatiner {
+        padding: 15px;
+    }
+    
+    .nav_box {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .nav_item {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .button-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+/* Responsive Login Pages */
+@media (max-width: 768px) {
+    .box, .container .box, .login-container {
+        width: 95%;
+        flex-direction: column;
+    }
+    
+    .box img, .image-container {
+        width: 100%;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    .formContent, .login-container form {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .input-group {
+        width: 100%;
+    }
+    
+    button {
+        width: 100%;
+    }
+}
+
+/* Responsive Camp Registration */
+@media (max-width: 768px) {
+    .box, #campform {
+        width: 95%;
+    }
+    
+    .column {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .column label {
+        margin: 5px 0;
+    }
+}
+
+/* Responsive Blood Availability */
+@media (max-width: 768px) {
+    .search div {
+        flex-direction: column;
+        height: auto;
+        gap: 10px;
+    }
+    
+    .search select, .search input, .search button {
+        width: 100%;
+    }
+    
+    .show_details {
+        overflow-x: auto;
+    }
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer table, .footer tbody, .footer tr, .footer td {
+        display: block;
+        text-align: center;
+    }
+    
+    .footer th {
+        display: none;
+    }
+    
+    .footer td {
+        padding: 8px;
+    }
+    
+    .images {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .footer_base {
+        font-size: 10px;
+    }
+}
+
+/* Utility Classes */
+@media (max-width: 768px) {
+    .hide-mobile {
+        display: none;
+    }
+    
+    .full-width-mobile {
+        width: 100%;
+    }
+    
+    .text-center-mobile {
+        text-align: center;
+    }
+}
+
+@media (min-width: 769px) {
+    .hide-desktop {
+        display: none;
+    }
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Touch Friendly Buttons */
+button, a, .clickable {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Better Touch Targets on Mobile */
+@media (max-width: 768px) {
+    button, 
+    .nav-link, 
+    .dropdown-btn,
+    .mobile-menu a,
+    .sidebar li {
+        padding: 12px 15px;
+        margin: 2px 0;
+    }
+}
+
+/* ============ DONOR LOGIN STYLES ============ */
+
+.donor-login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+}
+
+.donor-login-box {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+}
+
+.donor-login-title {
+    text-align: center;
+    color: #BF222B;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.donor-login-input-group {
+    margin-bottom: 20px;
+}
+
+.donor-login-input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.donor-login-input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.donor-login-input-group input:focus {
+    outline: none;
+    border-color: #BF222B;
+}
+
+.donor-login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #BF222B;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.donor-login-btn:hover {
+    background-color: #a11e26;
+}
+
+.donor-login-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.donor-login-error {
+    color: red;
+    text-align: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #ffe0e0;
+    border-radius: 5px;
+}
+
+.donor-login-signup-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.donor-login-signup-link a {
+    color: #BF222B;
+    text-decoration: none;
+}
+
+.donor-login-signup-link a:hover {
+    text-decoration: underline;
+}
+
+.donor-login-home-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.donor-login-home-link a {
+    color: #666;
+    text-decoration: none;
+}
+
+.donor-login-home-link a:hover {
+    color: #BF222B;
+}
+
+/* ============ STATUS BADGES (Common) ============ */
+
+.status-pending {
+    background-color: #ffc107;
+    color: #333;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-approved {
+    background-color: #17a2b8;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-completed {
+    background-color: #28a745;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-rejected {
+    background-color: #dc3545;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}

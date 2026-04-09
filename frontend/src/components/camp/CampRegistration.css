@@ -1,0 +1,190 @@
+/* Camp Registration Styles */
+
+.camp-reg-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 40px 20px;
+}
+
+.camp-reg-container {
+    width: 80vw;
+    max-width: 1000px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.camp-reg-header {
+    background: linear-gradient(135deg, #BF222B 0%, #8b1a1a 100%);
+    padding: 25px;
+    text-align: center;
+    color: white;
+}
+
+.camp-reg-header h3 {
+    font-size: 24px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.camp-reg-header p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-top: 8px;
+}
+
+/* Form */
+.camp-reg-form {
+    padding: 30px;
+}
+
+.camp-reg-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.camp-reg-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.camp-reg-field.full-width {
+    grid-column: span 2;
+}
+
+.camp-reg-field label {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.camp-reg-field label i {
+    color: #BF222B;
+}
+
+.camp-reg-field input,
+.camp-reg-field select {
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.camp-reg-field input:focus,
+.camp-reg-field select:focus {
+    outline: none;
+    border-color: #BF222B;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(191, 34, 43, 0.1);
+}
+
+.camp-reg-field input:hover,
+.camp-reg-field select:hover {
+    border-color: #BF222B;
+}
+
+.required-star {
+    color: #BF222B;
+    margin-left: 4px;
+}
+
+/* Submit Button */
+.camp-reg-submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.camp-reg-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+}
+
+.camp-reg-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .camp-reg-container {
+        width: 95vw;
+    }
+    
+    .camp-reg-form-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .camp-reg-field.full-width {
+        grid-column: span 1;
+    }
+    
+    .camp-reg-form {
+        padding: 20px;
+    }
+    
+    .camp-reg-header h3 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .camp-reg-container {
+        width: 100%;
+        margin: 10px;
+    }
+    
+    .camp-reg-form {
+        padding: 15px;
+    }
+    
+    .camp-reg-field input,
+    .camp-reg-field select {
+        padding: 10px 12px;
+    }
+    
+    .camp-reg-header h3 {
+        font-size: 18px;
+    }
+}

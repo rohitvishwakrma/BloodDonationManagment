@@ -1,0 +1,275 @@
+/* Donor Signup Styles */
+
+.donor-signup-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 40px 20px;
+}
+
+.donor-signup-container {
+    max-width: 900px;
+    width: 100%;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header */
+.donor-signup-header {
+    background: linear-gradient(135deg, #BF222B 0%, #8b1a1a 100%);
+    padding: 30px;
+    text-align: center;
+    color: white;
+}
+
+.donor-signup-header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.donor-signup-header p {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Form */
+.donor-signup-form {
+    padding: 30px;
+}
+
+/* Form Grid */
+.donor-signup-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.donor-signup-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.donor-signup-field.full-width {
+    grid-column: span 2;
+}
+
+.donor-signup-field label {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.donor-signup-field label i {
+    color: #BF222B;
+}
+
+.donor-signup-field input,
+.donor-signup-field select {
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.donor-signup-field input:focus,
+.donor-signup-field select:focus {
+    outline: none;
+    border-color: #BF222B;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(191, 34, 43, 0.1);
+}
+
+.donor-signup-field input:hover,
+.donor-signup-field select:hover {
+    border-color: #BF222B;
+}
+
+.required-star {
+    color: #BF222B;
+    margin-left: 4px;
+}
+
+/* Password Section */
+.donor-signup-password {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 16px;
+    margin-top: 10px;
+}
+
+/* Captcha */
+.donor-signup-captcha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 16px;
+}
+
+.captcha-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #fff0f0 0%, #ffe0e0 100%);
+    padding: 10px 20px;
+    border-radius: 12px;
+}
+
+.captcha-text {
+    font-size: 24px;
+    font-weight: bold;
+    font-family: monospace;
+    letter-spacing: 5px;
+    color: #BF222B;
+    text-decoration: line-through;
+}
+
+.captcha-refresh {
+    cursor: pointer;
+    font-size: 20px;
+    color: #BF222B;
+    transition: transform 0.3s;
+}
+
+.captcha-refresh:hover {
+    transform: rotate(180deg);
+}
+
+.captcha-input {
+    flex: 1;
+}
+
+.captcha-input input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 14px;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+/* Error Message */
+.donor-signup-error {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #dc2626;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    text-align: center;
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Submit Button */
+.donor-signup-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.donor-signup-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+}
+
+.donor-signup-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Login Link */
+.donor-signup-login-link {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.donor-signup-login-link a {
+    color: #BF222B;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.donor-signup-login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .donor-signup-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .donor-signup-field.full-width {
+        grid-column: span 1;
+    }
+    
+    .donor-signup-container {
+        margin: 20px;
+    }
+    
+    .donor-signup-form {
+        padding: 20px;
+    }
+    
+    .donor-signup-captcha {
+        flex-direction: column;
+    }
+    
+    .captcha-box {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .captcha-input {
+        width: 100%;
+    }
+}
