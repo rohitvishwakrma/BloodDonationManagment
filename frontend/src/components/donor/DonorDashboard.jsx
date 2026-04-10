@@ -11,6 +11,7 @@ const DonorDashboard = () => {
   const [searchResult, setSearchResult] = useState([])
   const [location, setLocation] = useState({ state: '', district: '' })
   const [profile, setProfile] = useState({})
+  const [searching, setSearching] = useState(false)
 
   useEffect(() => {
     fetchDashboard()
@@ -41,18 +42,50 @@ const DonorDashboard = () => {
 
   const handleSearchBanks = async (e) => {
     e.preventDefault()
+    if (!location.state || !location.district) {
+      alert('Please select both state and district')
+      return
+    }
+    
+    setSearching(true)
     try {
+      console.log('Sending location:', location)
       const res = await searchBanksByLocation(location)
-      setSearchResult(res.data.bankdata || [])
+      console.log('API Response:', res.data)
+      
+      // Fix: Get banks data from response
+      let banksData = []
+      if (res.data.data) {
+        banksData = res.data.data
+      } else if (res.data.bankdata) {
+        banksData = res.data.bankdata
+      } else if (Array.isArray(res.data)) {
+        banksData = res.data
+      }
+      
+      console.log('Banks data:', banksData)
+      setSearchResult(banksData)
+      
+      if (banksData.length === 0) {
+        alert('No banks found in this location')
+      }
     } catch (err) {
-      console.error(err)
+      console.error('Search error:', err)
+      alert('Failed to search banks')
+    } finally {
+      setSearching(false)
     }
   }
 
   const handleDonate = async (bankId) => {
     if (window.confirm('Are you sure you want to donate to this bank?')) {
-      await donateRequest(bankId, user.id)
-      fetchDashboard()
+      try {
+        await donateRequest({ bank_id: bankId, donor_id: user.id })
+        alert('Donation request sent successfully!')
+        fetchDashboard()
+      } catch (err) {
+        alert('Failed to send request')
+      }
     }
   }
 
@@ -63,23 +96,21 @@ const DonorDashboard = () => {
     }
   }
 
+  const pendingRequests = donationData.filter(d => d.status === 'pending' || d.status === 'approved')
+  const completedDonations = donationData.filter(d => d.status === 'completed')
+  
+  // Display banks - search result or all banks
+  const displayBanks = searchResult.length > 0 ? searchResult : banks
+
   return (
     <div className="donor-dashboard-container">
       <div className="donor-sidebar">
-        <h2>🩸 Donor Dashboard</h2>
+        <h2>Donor Dashboard</h2>
         <ul>
-          <li onClick={() => setActiveSection('dashboard')}>
-            <i className="fa-solid fa-chart-line"></i> Dashboard
-          </li>
-          <li onClick={() => setActiveSection('donation-history')}>
-            <i className="fa-solid fa-clock-rotate-left"></i> Donation History
-          </li>
-          <li onClick={() => setActiveSection('donation-repository')}>
-            <i className="fa-solid fa-hand-holding-heart"></i> Donation Request
-          </li>
-          <li onClick={() => setActiveSection('profile')}>
-            <i className="fa-solid fa-user-circle"></i> Profile
-          </li>
+          <li onClick={() => setActiveSection('dashboard')}>Dashboard</li>
+          <li onClick={() => setActiveSection('donation-history')}>Donation History</li>
+          <li onClick={() => setActiveSection('donation-repository')}>Donation Request</li>
+          <li onClick={() => setActiveSection('profile')}>Profile</li>
         </ul>
       </div>
       
@@ -88,20 +119,20 @@ const DonorDashboard = () => {
         {activeSection === 'dashboard' && (
           <section>
             <div className="donor-welcome">
-              <h2>Welcome, {profile.name} 👋</h2>
+              <h2>Welcome, {profile.name}</h2>
             </div>
             <div className="donor-overview">
               <div className="donor-card">
-                <h3>🩸 Blood Type</h3>
+                <h3>Blood Type</h3>
                 <p>{profile.bloodgroup}</p>
               </div>
               <div className="donor-card">
-                <h3>📊 Total Donations</h3>
+                <h3>Total Donations</h3>
                 <p>{profile.total_donation || 0}</p>
               </div>
             </div>
             <div className="donor-table-container">
-              <h3>📋 Recent Donation Requests</h3>
+              <h3>Recent Donation Requests</h3>
               <table className="donor-table">
                 <thead>
                   <tr>
@@ -112,10 +143,10 @@ const DonorDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {donationData.filter(d => d.status === 'pending' || d.status === 'approved').length === 0 ? (
-                    <tr><td colSpan="4">No pending requests</td></tr>
+                  {pendingRequests.length === 0 ? (
+                    <tr><td colSpan="4" style={{textAlign: 'center'}}>No pending requests</td></tr>
                   ) : (
-                    donationData.filter(d => d.status === 'pending' || d.status === 'approved').map((d, i) => (
+                    pendingRequests.map((d, i) => (
                       <tr key={i}>
                         <td>{new Date(d.application_date).toDateString()}</td>
                         <td>{d.Blood_Bank_Name}</td>
@@ -138,7 +169,7 @@ const DonorDashboard = () => {
         {activeSection === 'donation-history' && (
           <section>
             <div className="donor-table-container">
-              <h3>📜 Donation History</h3>
+              <h3>Donation History</h3>
               <table className="donor-table">
                 <thead>
                   <tr>
@@ -149,15 +180,15 @@ const DonorDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {donationData.filter(d => d.status === 'completed').length === 0 ? (
-                    <tr><td colSpan="4">No donation history found</td></tr>
+                  {completedDonations.length === 0 ? (
+                    <tr><td colSpan="4" style={{textAlign: 'center'}}>No donation history found</td></tr>
                   ) : (
-                    donationData.filter(d => d.status === 'completed').map((d, i) => (
+                    completedDonations.map((d, i) => (
                       <tr key={i}>
                         <td>{new Date(d.donation_date).toDateString()}</td>
                         <td>{d.blood_type}</td>
                         <td>{d.Blood_Bank_Name}</td>
-                        <td><span className="status-completed">✓ Completed</span></td>
+                        <td><span className="status-completed">Completed</span></td>
                       </tr>
                     ))
                   )}
@@ -171,50 +202,69 @@ const DonorDashboard = () => {
         {activeSection === 'donation-repository' && (
           <section>
             <form onSubmit={handleSearchBanks} className="donor-search-form">
-              <select onChange={(e) => setLocation({ ...location, state: e.target.value })} required>
+              <select 
+                value={location.state}
+                onChange={(e) => setLocation({ ...location, state: e.target.value, district: '' })} 
+                required
+              >
                 <option value="">Select State</option>
                 <option value="Madhya Pradesh">Madhya Pradesh</option>
               </select>
-              <select onChange={(e) => setLocation({ ...location, district: e.target.value })} required>
+              <select 
+                value={location.district}
+                onChange={(e) => setLocation({ ...location, district: e.target.value })} 
+                required
+                disabled={!location.state}
+              >
                 <option value="">Select District</option>
                 <option value="Bhopal">Bhopal</option>
                 <option value="Indore">Indore</option>
                 <option value="Jabalpur">Jabalpur</option>
+                <option value="Gwalior">Gwalior</option>
+                <option value="Ujjain">Ujjain</option>
               </select>
-              <button type="submit" className="donor-search-btn">
-                <i className="fa-solid fa-search"></i> Search Banks
+              <button type="submit" className="donor-search-btn" disabled={searching}>
+                {searching ? 'Searching...' : 'Search Banks'}
               </button>
             </form>
             <div className="donor-table-container">
-              <h3>🏦 Available Blood Banks</h3>
-              <table className="donor-table">
-                <thead>
-                  <tr>
-                    <th>Bank Name</th>
-                    <th>Category</th>
-                    <th>Email</th>
-                    <th>Contact</th>
-                    <th>Address</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(searchResult.length > 0 ? searchResult : banks).map((bank, i) => (
-                    <tr key={i}>
-                      <td>{bank.Blood_Bank_Name}</td>
-                      <td>{bank.Category}</td>
-                      <td>{bank.Email}</td>
-                      <td>{bank.Contact_No}</td>
-                      <td>{bank.Address}</td>
-                      <td>
-                        <button onClick={() => handleDonate(bank.bank_id)} className="donor-donate-btn">
-                          <i className="fa-solid fa-heart"></i> Donate Here!
-                        </button>
-                      </td>
+              <h3>Available Blood Banks</h3>
+              {displayBanks.length === 0 ? (
+                <p style={{ textAlign: 'center', padding: '40px' }}>
+                  {searchResult.length === 0 && location.state && location.district 
+                    ? 'No banks found in this location' 
+                    : 'Please search for banks in your area'}
+                </p>
+              ) : (
+                <table className="donor-table">
+                  <thead>
+                    <tr>
+                      <th>Bank Name</th>
+                      <th>Category</th>
+                      <th>Email</th>
+                      <th>Contact</th>
+                      <th>Address</th>
+                      <th>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {displayBanks.map((bank, i) => (
+                      <tr key={i}>
+                        <td>{bank.Blood_Bank_Name}</td>
+                        <td>{bank.Category}</td>
+                        <td>{bank.Email}</td>
+                        <td>{bank.Contact_No || bank.Conatct_No || 'N/A'}</td>
+                        <td>{bank.Address}</td>
+                        <td>
+                          <button onClick={() => handleDonate(bank.bank_id)} className="donor-donate-btn">
+                            Donate Here
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </section>
         )}
@@ -223,7 +273,7 @@ const DonorDashboard = () => {
         {activeSection === 'profile' && (
           <section>
             <form onSubmit={handleUpdateProfile} className="donor-profile-form">
-              <h3 style={{ marginBottom: '20px', color: '#BF222B' }}>Edit Profile</h3>
+              <h3>Edit Profile</h3>
               <label>
                 Email
                 <input type="email" value={profile.email || ''} onChange={(e) => setProfile({ ...profile, email: e.target.value })} />
@@ -241,7 +291,7 @@ const DonorDashboard = () => {
                 <input type="text" value={profile.address || ''} onChange={(e) => setProfile({ ...profile, address: e.target.value })} />
               </label>
               <button type="submit" className="donor-update-btn">
-                <i className="fa-solid fa-save"></i> Update Profile
+                Update Profile
               </button>
             </form>
           </section>

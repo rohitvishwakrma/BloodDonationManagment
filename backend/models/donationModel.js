@@ -1,16 +1,31 @@
 const db = require('../config/db');
 
+// Get all donations for a bank
+const getDonationsByBank = async (bankId) => {
+    const [rows] = await db.query(
+        `SELECT d.*, donor.name as donor_name, donor.bloodgroup, donor.phone
+         FROM donation d
+         JOIN donor ON d.donor_id = donor.id
+         WHERE d.bank_id = ?
+         ORDER BY d.application_date DESC`,
+        [bankId]
+    );
+    return rows;
+};
+
+// Get pending donations for a bank
 const getPendingDonations = async (bankId) => {
     const [rows] = await db.query(
-        `SELECT d.*, donor.name as donor_name, donor.bloodgroup 
-         FROM donation d 
-         JOIN donor ON d.donor_id = donor.id 
+        `SELECT d.*, donor.name as donor_name, donor.bloodgroup
+         FROM donation d
+         JOIN donor ON d.donor_id = donor.id
          WHERE d.bank_id = ? AND d.status = 'pending'`,
         [bankId]
     );
     return rows;
 };
 
+// Approve donation
 const approveDonation = async (donationId, donationDate, donationTime) => {
     const [result] = await db.query(
         'UPDATE donation SET donation_date = ?, donation_time = ?, status = "approved" WHERE id = ?',
@@ -19,6 +34,7 @@ const approveDonation = async (donationId, donationDate, donationTime) => {
     return result.affectedRows;
 };
 
+// Complete donation
 const completeDonation = async (donationId, bankId, donorId, bloodGroup, donationDate) => {
     const connection = await db.getConnection();
     try {
@@ -52,4 +68,9 @@ const completeDonation = async (donationId, bankId, donorId, bloodGroup, donatio
     }
 };
 
-module.exports = { getPendingDonations, approveDonation, completeDonation };
+module.exports = {
+    getDonationsByBank,
+    getPendingDonations,
+    approveDonation,
+    completeDonation
+};

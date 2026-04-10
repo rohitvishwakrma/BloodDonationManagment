@@ -1,0 +1,446 @@
+/* Bank Dashboard Styles - Improved */
+
+.bank-dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f0f2f5 0%, #e0e5ec 100%);
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+/* ============ SIDEBAR ============ */
+.bank-sidebar {
+    width: 280px;
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+    padding: 30px 0;
+    color: #fff;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.bank-sidebar h3 {
+    color: #f9aa33;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 22px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.bank-sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.bank-sidebar li {
+    padding: 14px 25px;
+    margin: 5px 15px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.bank-sidebar li:hover {
+    background: linear-gradient(90deg, #f9aa33 0%, #e69a2e 100%);
+    transform: translateX(5px);
+    color: #1a1a2e;
+}
+
+.bank-sidebar li i {
+    width: 22px;
+    font-size: 18px;
+}
+
+/* ============ CONTENT ============ */
+.bank-content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 30px;
+    overflow-x: auto;
+}
+
+/* Welcome Section */
+.bank-welcome {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    padding: 25px 30px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #BF222B;
+}
+
+.bank-welcome h2 {
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bank-welcome p {
+    color: #7f8c8d;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Stats Cards */
+.bank-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.bank-stat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.bank-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.bank-stat-card h3 {
+    color: #7f8c8d;
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.bank-stat-card p {
+    color: #BF222B;
+    font-size: 36px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Table Container */
+.bank-table-container {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    margin-top: 25px;
+    overflow-x: auto;
+}
+
+.bank-table-container h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 18px;
+    border-left: 4px solid #BF222B;
+    padding-left: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Table Styles */
+.bank-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.bank-table th {
+    background: linear-gradient(135deg, #BF222B 0%, #a11e26 100%);
+    color: white;
+    padding: 14px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.bank-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ecf0f1;
+    color: #34495e;
+    font-size: 14px;
+}
+
+.bank-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Inventory Table */
+.inventory-table td:first-child {
+    font-weight: bold;
+    color: #BF222B;
+}
+
+/* Buttons */
+.bank-approve-btn {
+    background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+    color: white;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s;
+    margin-left: 8px;
+}
+
+.bank-approve-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 3px 10px rgba(39, 174, 96, 0.3);
+}
+
+.bank-complete-btn {
+    background: linear-gradient(135deg, #2980b9 0%, #1f618d 100%);
+    color: white;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.bank-complete-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 3px 10px rgba(41, 128, 185, 0.3);
+}
+
+/* Action Input Group */
+.bank-action-input {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.bank-action-input input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+/* Profile Form */
+.bank-profile-form {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+}
+
+.bank-profile-form h3 {
+    margin-bottom: 25px;
+    color: #BF222B;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bank-profile-form label {
+    display: block;
+    margin-bottom: 20px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.bank-profile-form input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.bank-profile-form input:focus {
+    outline: none;
+    border-color: #BF222B;
+    box-shadow: 0 0 0 3px rgba(191, 34, 43, 0.1);
+}
+
+.bank-update-btn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.bank-update-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+/* Status Badges */
+.status-pending {
+    background: #f39c12;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-approved {
+    background: #3498db;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-completed {
+    background: #27ae60;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Empty State */
+.bank-empty-state {
+    text-align: center;
+    padding: 60px;
+    color: #95a5a6;
+}
+
+.bank-empty-state i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    color: #bdc3c7;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .bank-sidebar {
+        width: 240px;
+    }
+    
+    .bank-content {
+        margin-left: 240px;
+    }
+    
+    .bank-stats {
+        gap: 15px;
+    }
+    
+    .bank-stat-card p {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .bank-dashboard-container {
+        flex-direction: column;
+    }
+    
+    .bank-sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 15px;
+    }
+    
+    .bank-sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .bank-sidebar li {
+        padding: 10px 15px;
+        margin: 0;
+        font-size: 13px;
+    }
+    
+    .bank-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+    
+    .bank-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .bank-table th,
+    .bank-table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+    
+    .bank-action-input {
+        flex-direction: column;
+    }
+    
+    .bank-approve-btn {
+        margin-top: 5px;
+    }
+}/* Add to your existing CSS for icon colors */
+.bank-sidebar li i {
+    color: #f9aa33;
+    font-size: 18px;
+    width: 22px;
+}
+
+.bank-welcome h2 i,
+.bank-welcome p i {
+    color: #BF222B;
+}
+
+.bank-stat-card h3 i {
+    color: #BF222B;
+}
+
+.bank-table-container h3 i {
+    color: #BF222B;
+}
+
+.bank-profile-form h3 i,
+.bank-profile-form label i {
+    color: #BF222B;
+    margin-right: 8px;
+}
+
+.bank-empty-state i {
+    font-size: 48px;
+    color: #bdc3c7;
+    margin-bottom: 15px;
+}

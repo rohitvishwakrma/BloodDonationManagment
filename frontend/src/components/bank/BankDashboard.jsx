@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { getBankDashboard, updateBank, approveDonation, completeDonation } from '../../services/api'
+import './BankDashboard.css'
 
 const BankDashboard = () => {
   const { user } = useAuth()
@@ -20,13 +21,15 @@ const BankDashboard = () => {
   const fetchDashboard = async () => {
     try {
       const res = await getBankDashboard()
-      setBankData(res.data.bankdata || {})
-      setDonors(res.data.donordata || [])
-      setDonations(res.data.donationdata || [])
-      setInventory(res.data.bloodInventory || {})
-      setProfile(res.data.bankdata || {})
+      const dashboardData = res.data.data || res.data
+      
+      setBankData(dashboardData.bankdata || {})
+      setDonors(dashboardData.donordata || [])
+      setDonations(dashboardData.donationdata || [])
+      setInventory(dashboardData.bloodInventory || {})
+      setProfile(dashboardData.bankdata || {})
     } catch (err) {
-      console.error(err)
+      console.error('Dashboard fetch error:', err)
     }
   }
 
@@ -59,27 +62,39 @@ const BankDashboard = () => {
     }
   }
 
-  const totalBloodUnits = Object.values(inventory).reduce((a, b) => a + (b || 0), 0)
+  const totalBloodUnits = () => {
+    if (!inventory) return 0
+    let total = 0
+    for (let key in inventory) {
+      if (inventory.hasOwnProperty(key)) {
+        total += Number(inventory[key]) || 0
+      }
+    }
+    return total
+  }
+
+  const pendingDonations = donations.filter(d => d.status === 'pending')
+  const approvedDonations = donations.filter(d => d.status === 'approved')
 
   return (
     <div className="bank-dashboard-container">
       <div className="bank-sidebar">
-        <h3>🩸 Blood Bank Dashboard</h3>
+        <h3><i className="ri-droplet-line" style={{ color: '#f9aa33' }}></i> Blood Bank Dashboard</h3>
         <ul>
           <li onClick={() => setActiveSection('dashboard')}>
-            <i className="fa-solid fa-chart-pie"></i> Dashboard
+            <i className="ri-dashboard-line" style={{ color: '#f9aa33' }}></i> Dashboard
           </li>
           <li onClick={() => setActiveSection('blood-inventory')}>
-            <i className="fa-solid fa-droplet"></i> Blood Inventory
+            <i className="ri-flask-line" style={{ color: '#f9aa33' }}></i> Blood Inventory
           </li>
           <li onClick={() => setActiveSection('upcoming-donation')}>
-            <i className="fa-solid fa-calendar-check"></i> Upcoming Donation
+            <i className="ri-calendar-check-line" style={{ color: '#f9aa33' }}></i> Upcoming Donation
           </li>
           <li onClick={() => setActiveSection('donation-repository')}>
-            <i className="fa-solid fa-hand-holding-heart"></i> Donation Request
+            <i className="ri-hand-heart-line" style={{ color: '#f9aa33' }}></i> Donation Request
           </li>
           <li onClick={() => setActiveSection('profile')}>
-            <i className="fa-solid fa-user-edit"></i> Profile
+            <i className="ri-user-settings-line" style={{ color: '#f9aa33' }}></i> Profile
           </li>
         </ul>
       </div>
@@ -87,34 +102,34 @@ const BankDashboard = () => {
       <div className="bank-content">
         {/* Dashboard Section */}
         {activeSection === 'dashboard' && (
-          <section>
+          <div>
             <div className="bank-welcome">
-              <h2>🏦 {bankData.Blood_Bank_Name}</h2>
-              <p><i className="fa-solid fa-location-dot"></i> {bankData.Address}</p>
+              <h2><i className="ri-bank-line" style={{ color: '#BF222B' }}></i> {bankData.Blood_Bank_Name}</h2>
+              <p><i className="ri-map-pin-line" style={{ color: '#BF222B' }}></i> {bankData.Address}</p>
             </div>
             <div className="bank-stats">
               <div className="bank-stat-card">
-                <h3>🩸 Total Blood Units</h3>
-                <p>{totalBloodUnits} units</p>
+                <h3><i className="ri-droplet-line" style={{ color: '#BF222B' }}></i> Total Blood Units</h3>
+                <p>{totalBloodUnits()} units</p>
               </div>
               <div className="bank-stat-card">
-                <h3>📅 Upcoming Donations</h3>
-                <p>{donations.filter(d => d.status === 'approved').length}</p>
+                <h3><i className="ri-calendar-line" style={{ color: '#BF222B' }}></i> Upcoming Donations</h3>
+                <p>{approvedDonations.length}</p>
               </div>
               <div className="bank-stat-card">
-                <h3>⏳ Pending Requests</h3>
-                <p>{donations.filter(d => d.status === 'pending').length}</p>
+                <h3><i className="ri-time-line" style={{ color: '#BF222B' }}></i> Pending Requests</h3>
+                <p>{pendingDonations.length}</p>
               </div>
             </div>
-          </section>
+          </div>
         )}
 
         {/* Blood Inventory Section */}
         {activeSection === 'blood-inventory' && (
-          <section>
-            <div className="bank-table-container">
-              <h3>📊 Blood Inventory Stock</h3>
-              <table className="bank-table inventory-table">
+          <div className="bank-table-container">
+            <h3><i className="ri-bar-chart-line" style={{ color: '#BF222B' }}></i> Blood Inventory Stock</h3>
+            {inventory && Object.keys(inventory).length > 0 ? (
+              <table className="bank-table">
                 <thead>
                   <tr>
                     <th>Blood Type</th>
@@ -126,21 +141,25 @@ const BankDashboard = () => {
                   {Object.entries(inventory).map(([key, value]) => (
                     <tr key={key}>
                       <td><strong>{key}</strong></td>
-                      <td>{value || 0} units</td>
+                      <td>{value} units</td>
                       <td>{new Date().toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            </div>
-          </section>
+            ) : (
+              <p className="bank-empty-state"><i className="ri-inbox-line"></i> No inventory data available</p>
+            )}
+          </div>
         )}
 
         {/* Upcoming Donation Section */}
         {activeSection === 'upcoming-donation' && (
-          <section>
-            <div className="bank-table-container">
-              <h3>📋 Approved Donation Requests</h3>
+          <div className="bank-table-container">
+            <h3><i className="ri-calendar-event-line" style={{ color: '#BF222B' }}></i> Approved Donation Requests</h3>
+            {approvedDonations.length === 0 ? (
+              <p className="bank-empty-state"><i className="ri-inbox-line"></i> No approved donations</p>
+            ) : (
               <table className="bank-table">
                 <thead>
                   <tr>
@@ -151,19 +170,19 @@ const BankDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {donations.filter(d => d.status === 'approved').map((d, i) => {
+                  {approvedDonations.map((d, i) => {
                     const donor = donors.find(don => don.id === d.donor_id)
                     return (
                       <tr key={i}>
                         <td>{donor?.name}</td>
                         <td><span className="status-approved">{donor?.bloodgroup}</span></td>
-                        <td>{new Date(d.donation_date).toDateString()}</td>
+                        <td>{d.donation_date ? new Date(d.donation_date).toDateString() : 'Not scheduled'}</td>
                         <td>
                           <button 
                             onClick={() => handleCompleteDonation(d.id, bankData.bank_id, d.donor_id)} 
                             className="bank-complete-btn"
                           >
-                            <i className="fa-solid fa-check-circle"></i> Complete
+                            <i className="ri-check-line"></i> Complete
                           </button>
                         </td>
                       </tr>
@@ -171,15 +190,17 @@ const BankDashboard = () => {
                   })}
                 </tbody>
               </table>
-            </div>
-          </section>
+            )}
+          </div>
         )}
 
         {/* Donation Repository Section */}
         {activeSection === 'donation-repository' && (
-          <section>
-            <div className="bank-table-container">
-              <h3>📝 Pending Donation Requests</h3>
+          <div className="bank-table-container">
+            <h3><i className="ri-list-check-line" style={{ color: '#BF222B' }}></i> Pending Donation Requests</h3>
+            {pendingDonations.length === 0 ? (
+              <p className="bank-empty-state"><i className="ri-inbox-line"></i> No pending requests</p>
+            ) : (
               <table className="bank-table">
                 <thead>
                   <tr>
@@ -190,7 +211,7 @@ const BankDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {donations.filter(d => d.status === 'pending').map((d, i) => {
+                  {pendingDonations.map((d, i) => {
                     const donor = donors.find(don => don.id === d.donor_id)
                     return (
                       <tr key={i}>
@@ -212,7 +233,7 @@ const BankDashboard = () => {
                               onClick={() => handleApproveDonation(d.id, selectedDate[d.id], selectedTime[d.id])} 
                               className="bank-approve-btn"
                             >
-                              <i className="fa-solid fa-thumbs-up"></i> Approve
+                              <i className="ri-thumb-up-line"></i> Approve
                             </button>
                           </div>
                         </td>
@@ -221,40 +242,40 @@ const BankDashboard = () => {
                   })}
                 </tbody>
               </table>
-            </div>
-          </section>
+            )}
+          </div>
         )}
 
         {/* Profile Section */}
         {activeSection === 'profile' && (
-          <section>
-            <form onSubmit={handleUpdateProfile} className="bank-profile-form">
-              <h3 style={{ marginBottom: '20px', color: '#BF222B' }}>✏️ Edit Bank Profile</h3>
+          <div className="bank-profile-form">
+            <form onSubmit={handleUpdateProfile}>
+              <h3><i className="ri-edit-line" style={{ color: '#BF222B' }}></i> Edit Bank Profile</h3>
               <label>
-                <i className="fa-solid fa-envelope"></i> Email
+                <i className="ri-mail-line" style={{ color: '#BF222B' }}></i> Email
                 <input type="email" value={profile.Email || ''} onChange={(e) => setProfile({ ...profile, Email: e.target.value })} />
               </label>
               <label>
-                <i className="fa-solid fa-building"></i> Bank Name
+                <i className="ri-bank-line" style={{ color: '#BF222B' }}></i> Bank Name
                 <input type="text" value={profile.Blood_Bank_Name || ''} onChange={(e) => setProfile({ ...profile, Blood_Bank_Name: e.target.value })} />
               </label>
               <label>
-                <i className="fa-solid fa-hospital"></i> Hospital Name
+                <i className="ri-hospital-line" style={{ color: '#BF222B' }}></i> Hospital Name
                 <input type="text" value={profile.Hospital_Name || ''} onChange={(e) => setProfile({ ...profile, Hospital_Name: e.target.value })} />
               </label>
               <label>
-                <i className="fa-solid fa-phone"></i> Mobile Number
+                <i className="ri-phone-line" style={{ color: '#BF222B' }}></i> Mobile Number
                 <input type="text" value={profile.Contact_No || ''} onChange={(e) => setProfile({ ...profile, Contact_No: e.target.value })} />
               </label>
               <label>
-                <i className="fa-solid fa-location-dot"></i> Address
+                <i className="ri-map-pin-line" style={{ color: '#BF222B' }}></i> Address
                 <input type="text" value={profile.Address || ''} onChange={(e) => setProfile({ ...profile, Address: e.target.value })} />
               </label>
               <button type="submit" className="bank-update-btn">
-                <i className="fa-solid fa-save"></i> Update Profile
+                <i className="ri-save-line"></i> Update Profile
               </button>
             </form>
-          </section>
+          </div>
         )}
       </div>
     </div>

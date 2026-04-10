@@ -12,7 +12,13 @@ const getDonorById = async (id) => {
     return rows[0];
 };
 
-// Create donor - ADDED aadhar and father_name
+// Get all donors
+const getAllDonors = async () => {
+    const [rows] = await db.query('SELECT id, name, email, bloodgroup, phone, address FROM donor');
+    return rows;
+};
+
+// Create donor
 const createDonor = async (data) => {
     const { name, age, gender, bloodgroup, email, phone, address, password, aadhar, father_name } = data;
     
@@ -66,20 +72,21 @@ const createDonationRequest = async (donorId, bankId) => {
 
 // Search banks by location
 const searchBanksByLocation = async (state, district) => {
-    console.log('Searching for - State:', state, 'District:', district); // Debug
+    console.log('Searching for - State:', state, 'District:', district);
     
     const [rows] = await db.query(
         "SELECT * FROM bank WHERE state = ? AND district = ? AND Action = 'accepted'",
         [state, district]
     );
     
-    console.log('Found banks:', rows.length); // Debug
+    console.log('Found banks:', rows.length);
     return rows;
 };
 
 module.exports = {
     getDonorByEmail,
     getDonorById,
+    getAllDonors,
     createDonor,
     updateDonor,
     getDonationHistory,
