@@ -1,50 +1,30 @@
 const db = require('../config/db');
 
-// Get all banks
+// ============ GET ALL BANKS ============
 const getAllBanks = async () => {
     const [rows] = await db.query('SELECT * FROM bank');
     return rows;
 };
 
-// Get accepted banks
+// ============ GET ACCEPTED BANKS ============
 const getAcceptedBanks = async () => {
     const [rows] = await db.query("SELECT * FROM bank WHERE Action = 'accepted'");
     return rows;
 };
 
-// Get bank by ID
+// ============ GET PENDING BANKS ============
+const getPendingBanks = async () => {
+    const [rows] = await db.query("SELECT * FROM bank WHERE Action = 'pending'");
+    return rows;
+};
+
+// ============ GET BANK BY ID ============
 const getBankById = async (bankId) => {
     const [rows] = await db.query('SELECT * FROM bank WHERE bank_id = ?', [bankId]);
     return rows[0];
 };
 
-// Create bank registration - FIXED COLUMN COUNT
-// const createBank = async (data) => {
-//     const { 
-//         Blood_Bank_Name, Hospital_Name, Category, Person_Name, Email, 
-//         Contact_No, Licence_No, License_Issue, License_Expiry, Website, 
-//         No_Beds, state, district, Address, Pincode,
-//         Donor_Type, Donation_Type, Component_Type, Bag_Type, TTI_Type
-//     } = data;
-    
-//     // Count: 20 columns and 20 values
-//     const [result] = await db.query(
-//         `INSERT INTO bank (
-//             Blood_Bank_Name, Hospital_Name, Category, Person_Name, Email, 
-//             Conatct_No, Licence_No, License_Issue, License_Expiry, Website, 
-//             No_Beds, state, district, Address, Pincode,
-//             Donor_Type, Donation_Type, Component_Type, Bag_Type, TTI_Type
-//         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-//         [
-//             Blood_Bank_Name, Hospital_Name, Category, Person_Name, Email, 
-//             Contact_No, Licence_No, License_Issue, License_Expiry, Website, 
-//             No_Beds, state, district, Address, Pincode,
-//             Donor_Type, Donation_Type, Component_Type, Bag_Type, TTI_Type
-//         ]
-//     );
-//     return result.insertId;
-// };
-
+// ============ CREATE BANK REGISTRATION ============
 const createBank = async (data) => {
     const { 
         Blood_Bank_Name, Hospital_Name, Category, Person_Name, Email, 
@@ -63,8 +43,8 @@ const createBank = async (data) => {
             Blood_Bank_Name, Hospital_Name, Category, Person_Name, Email, 
             Conatct_No, Licence_No, License_Issue, License_Expiry, Website, 
             No_Beds, state, district, Address, Pincode,
-            Donor_Type, Donation_Type, Component_Type, Bag_Type, TTI_Type
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            Donor_Type, Donation_Type, Component_Type, Bag_Type, TTI_Type, Action
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
         [
             Blood_Bank_Name || '', Hospital_Name || '', Category || '', Person_Name || '', Email || '', 
             Contact_No || '', Licence_No || '', licenseIssue, licenseExpiry, Website || '', 
@@ -74,7 +54,8 @@ const createBank = async (data) => {
     );
     return result.insertId;
 };
-// Update bank
+
+// ============ UPDATE BANK PROFILE ============
 const updateBank = async (bankId, data) => {
     const { Email, Blood_Bank_Name, Hospital_Name, Contact_No, Address } = data;
     const [result] = await db.query(
@@ -84,7 +65,7 @@ const updateBank = async (bankId, data) => {
     return result.affectedRows;
 };
 
-// Update bank status
+// ============ UPDATE BANK STATUS (ACCEPT/REJECT) ============
 const updateBankStatus = async (bankId, status) => {
     const [result] = await db.query(
         'UPDATE bank SET Action = ? WHERE bank_id = ?',
@@ -93,7 +74,7 @@ const updateBankStatus = async (bankId, status) => {
     return result.affectedRows;
 };
 
-// Delete bank
+// ============ DELETE BANK ============
 const deleteBank = async (bankId) => {
     const [result] = await db.query('DELETE FROM bank WHERE bank_id = ?', [bankId]);
     return result.affectedRows;
@@ -102,9 +83,10 @@ const deleteBank = async (bankId) => {
 module.exports = {
     getAllBanks,
     getAcceptedBanks,
+    getPendingBanks,
     getBankById,
     createBank,
+    updateBank,
     updateBankStatus,
-    deleteBank,
-    updateBank
+    deleteBank
 };

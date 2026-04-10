@@ -75,22 +75,29 @@ router.post('/acceptBloodBank/:bank_id', isAdmin, async (req, res) => {
     try {
         const bankId = req.params.bank_id;
         
+        // Update bank status to accepted
         await updateBankStatus(bankId, 'accepted');
         
+        // Get bank details
         const [bankRows] = await db.query('SELECT * FROM bank WHERE bank_id = ?', [bankId]);
         const bank = bankRows[0];
         
-        const defaultPassword = 'Bank@123';
-        const hashedPassword = await bcrypt.hash(defaultPassword, 10);
-        await db.query('INSERT INTO bank_admin (username, password, bank_id) VALUES (?, ?, ?)', 
-            [bank.Email, hashedPassword, bankId]);
+        if (bank) {
+            // Create bank admin with default password
+            const defaultPassword = 'Bank@123';
+            const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+            await db.query('INSERT INTO bank_admin (username, password, bank_id) VALUES (?, ?, ?)', 
+                [bank.Email, hashedPassword, bankId]);
+            
+            // Initialize inventory
+            const conn = await db.getConnection();
+            await initializeInventory(bankId, conn);
+            conn.release();
+        }
         
-        const conn = await db.getConnection();
-        await initializeInventory(bankId, conn);
-        conn.release();
-        
-        res.json({ success: true, message: 'Bank accepted successfully', tempPassword: defaultPassword });
+        res.json({ success: true, message: 'Bank accepted successfully' });
     } catch (err) {
+        console.error('Accept bank error:', err);
         res.status(500).json({ success: false, message: err.message });
     }
 });
@@ -98,9 +105,11 @@ router.post('/acceptBloodBank/:bank_id', isAdmin, async (req, res) => {
 // ============ REJECT BANK API ============
 router.post('/rejectBloodBank/:bank_id', isAdmin, async (req, res) => {
     try {
-        await deleteBank(req.params.bank_id);
+        const bankId = req.params.bank_id;
+        await updateBankStatus(bankId, 'rejected');
         res.json({ success: true, message: 'Bank rejected successfully' });
     } catch (err) {
+        console.error('Reject bank error:', err);
         res.status(500).json({ success: false, message: err.message });
     }
 });
@@ -108,9 +117,11 @@ router.post('/rejectBloodBank/:bank_id', isAdmin, async (req, res) => {
 // ============ ACCEPT CAMP API ============
 router.post('/acceptCamp/:camp_id', isAdmin, async (req, res) => {
     try {
-        await updateCampStatus(req.params.camp_id, 'accepted');
+        const campId = req.params.camp_id;
+        await updateCampStatus(campId, 'accepted');
         res.json({ success: true, message: 'Camp accepted successfully' });
     } catch (err) {
+        console.error('Accept camp error:', err);
         res.status(500).json({ success: false, message: err.message });
     }
 });
@@ -118,9 +129,11 @@ router.post('/acceptCamp/:camp_id', isAdmin, async (req, res) => {
 // ============ REJECT CAMP API ============
 router.post('/rejectCamp/:camp_id', isAdmin, async (req, res) => {
     try {
-        await deleteCamp(req.params.camp_id);
+        const campId = req.params.camp_id;
+        await updateCampStatus(campId, 'rejected');
         res.json({ success: true, message: 'Camp rejected successfully' });
     } catch (err) {
+        console.error('Reject camp error:', err);
         res.status(500).json({ success: false, message: err.message });
     }
 });

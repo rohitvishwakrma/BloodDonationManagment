@@ -15,21 +15,36 @@ const AdminDashboard = () => {
     fetchDashboard()
   }, [])
 
-  const fetchDashboard = async () => {
+  // const fetchDashboard = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const res = await getAdminDashboard()
+  //     const dashboardData = res.data.data || res.data
+  //     setBanks(dashboardData.banks || [])
+  //     setCamps(dashboardData.camps || [])
+  //     setStats(dashboardData.stats || {})
+  //   } catch (err) {
+  //     console.error('Dashboard error:', err)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+const fetchDashboard = async () => {
     setLoading(true)
     try {
-      const res = await getAdminDashboard()
-      const dashboardData = res.data.data || res.data
-      setBanks(dashboardData.banks || [])
-      setCamps(dashboardData.camps || [])
-      setStats(dashboardData.stats || {})
+        const res = await getAdminDashboard()
+        const dashboardData = res.data.data || res.data
+        console.log('Banks from API:', dashboardData.banks)  // ✅ Add this
+        console.log('Bank Actions:', dashboardData.banks?.map(b => ({ name: b.Blood_Bank_Name, action: b.Action })))  // ✅ Add this
+        setBanks(dashboardData.banks || [])
+        setCamps(dashboardData.camps || [])
+        setStats(dashboardData.stats || {})
     } catch (err) {
-      console.error('Dashboard error:', err)
+        console.error('Dashboard error:', err)
     } finally {
-      setLoading(false)
+        setLoading(false)
     }
-  }
-
+}
   const handleAcceptBank = async (bankId) => {
     if (window.confirm('Are you sure you want to accept this blood bank?')) {
       await acceptBank(bankId)
