@@ -17,17 +17,7 @@ const DonorDashboard = () => {
     fetchDashboard()
   }, [])
 
-  // const fetchDashboard = async () => {
-  //   try {
-  //     const res = await getDonorDashboard()
-  //     console.log('Dashboard API Response:', res.data)
-  //     setDonationData(res.data.donationHistory || [])
-  //     setBanks(res.data.banks || [])
-  //     setProfile(res.data.user || {})
-  //   } catch (err) {
-  //     console.error(err)
-  //   }
-  // }
+  
   const fetchDashboard = async () => {
     try {
         const res = await getDonorDashboard()
