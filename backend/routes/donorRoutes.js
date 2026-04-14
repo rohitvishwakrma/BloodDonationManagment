@@ -15,8 +15,6 @@ const {
 const { getAcceptedBanks } = require('../models/bankModel');
 const db = require('../config/db');
 
-// ============ API ROUTES (For React) ============
-
 // ============ DONOR SIGNUP API ============
 router.post('/signup', async (req, res) => {
     try {
@@ -25,7 +23,6 @@ router.post('/signup', async (req, res) => {
             password, aadhar, father_name, pin 
         } = req.body;
         
-        // Check if donor already exists
         const existing = await getDonorByEmail(email);
         if (existing) {
             return res.status(400).json({ success: false, message: 'Email already exists' });
@@ -140,7 +137,6 @@ router.post('/donation-request', isDonor, async (req, res) => {
         const { bank_id, donor_id } = req.body;
         console.log('Donation request received:', { bank_id, donor_id });
         
-        // Check if already requested
         const [existing] = await db.query(
             'SELECT * FROM donation WHERE donor_id = ? AND bank_id = ? AND status = "pending"',
             [donor_id, bank_id]
@@ -158,40 +154,17 @@ router.post('/donation-request', isDonor, async (req, res) => {
     }
 });
 
-// // ============ DROP DONATION REQUEST API ============
-// router.delete('/donation-request/:donor_id', isDonor, async (req, res) => {
-//     try {
-//         await db.query('DELETE FROM donation WHERE donor_id = ? AND status = "pending"', [req.params.donor_id]);
-//         res.json({ success: true, message: 'Donation request cancelled' });
-//     } catch (err) {
-//         console.error('Drop request error:', err);
-//         res.status(500).json({ success: false, message: err.message });
-//     }
-// });
-
-// Create Donation Request API
-router.post('/donation-request', isDonor, async (req, res) => {
+// ============ DROP DONATION REQUEST API ============
+router.delete('/donation-request/:donor_id', isDonor, async (req, res) => {
     try {
-        const { bank_id, donor_id } = req.body;
-        console.log('Donation request received:', { bank_id, donor_id });
-        
-        // Check if already requested
-        const [existing] = await db.query(
-            'SELECT * FROM donation WHERE donor_id = ? AND bank_id = ? AND status = "pending"',
-            [donor_id, bank_id]
-        );
-        
-        if (existing.length > 0) {
-            return res.status(400).json({ success: false, message: 'Donation request already pending' });
-        }
-        
-        await createDonationRequest(donor_id, bank_id);
-        res.json({ success: true, message: 'Donation request sent successfully' });
+        await db.query('DELETE FROM donation WHERE donor_id = ? AND status = "pending"', [req.params.donor_id]);
+        res.json({ success: true, message: 'Donation request cancelled' });
     } catch (err) {
-        console.error('Donation request error:', err);
+        console.error('Drop request error:', err);
         res.status(500).json({ success: false, message: err.message });
     }
 });
+
 // ============ GET DONATION HISTORY API ============
 router.get('/donation-history', isDonor, async (req, res) => {
     try {

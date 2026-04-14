@@ -17,17 +17,36 @@ const DonorDashboard = () => {
     fetchDashboard()
   }, [])
 
+  // const fetchDashboard = async () => {
+  //   try {
+  //     const res = await getDonorDashboard()
+  //     console.log('Dashboard API Response:', res.data)
+  //     setDonationData(res.data.donationHistory || [])
+  //     setBanks(res.data.banks || [])
+  //     setProfile(res.data.user || {})
+  //   } catch (err) {
+  //     console.error(err)
+  //   }
+  // }
   const fetchDashboard = async () => {
     try {
-      const res = await getDonorDashboard()
-      console.log('Dashboard API Response:', res.data) 
-      setDonationData(res.data.donationData || [])
-      setBanks(res.data.banks || [])
-      setProfile(res.data.user || {})
+        const res = await getDonorDashboard()
+        console.log('Full Response:', res)
+        console.log('Response data:', res.data)
+        
+        // Fix: Check response structure
+        const responseData = res.data.data || res.data
+        console.log('User Data:', responseData.user)
+        console.log('Donation History:', responseData.donationHistory)
+        console.log('Banks:', responseData.banks)
+        
+        setDonationData(responseData.donationHistory || [])
+        setBanks(responseData.banks || [])
+        setProfile(responseData.user || {})
     } catch (err) {
-      console.error(err)
+        console.error('Dashboard error:', err)
     }
-  }
+}
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault()

@@ -50,7 +50,10 @@ const Footer = () => {
 
         <div className="footer-bottom">
           <p>© 2025 Rakt Daan. All rights reserved.</p>
-          <p>Developed with <i className="ri-heart-fill color=red"></i> by Rohit Vishwakarma</p>
+          <p>Developed with
+            <a href="https://www.linkedin.com/in/rohit-vishwakarma-915143288/">
+              <i className="ri-heart-fill color=red"></i>
+              </a>  <Link to={"https://github.com/rohitvishwakrma/BloodDonationManagment"}> by Rohit Vishwakarma</Link></p>
         </div>
       </div>
     </footer>

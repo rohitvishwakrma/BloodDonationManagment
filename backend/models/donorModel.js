@@ -58,6 +58,7 @@ const getDonationHistory = async (donorId) => {
          WHERE d.donor_id = ?`,
         [donorId]
     );
+    console.log('Donation history rows:', rows.length);
     return rows;
 };
 
