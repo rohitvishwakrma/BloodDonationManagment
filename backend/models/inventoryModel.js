@@ -17,8 +17,19 @@ const searchBloodAvailability = async (state, district, bloodGroup) => {
 };
 
 const getBloodStockSummary = async (bankId) => {
-    const [rows] = await db.query('SELECT bloodgroup, quantity FROM inventory WHERE bank_id = ?', [bankId]);
-    return rows;
+    const [rows] = await db.query(
+        'SELECT bloodgroup, SUM(quantity) as quantity FROM inventory WHERE bank_id = ? GROUP BY bloodgroup',
+        [bankId]
+    );
+    
+    // Convert array to object for frontend
+    const inventoryObj = {};
+    rows.forEach(row => {
+        inventoryObj[row.bloodgroup] = row.quantity;
+    });
+    
+    console.log('Inventory for bank', bankId, ':', inventoryObj);
+    return inventoryObj;
 };
 
 const initializeInventory = async (bankId, connection) => {
